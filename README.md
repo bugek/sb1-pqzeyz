@@ -2,7 +2,47 @@
 
 This project is a drama management system that includes various components for handling drama data, mapping, and statistics. It provides interfaces and components for managing drama sources, mapping tables, migration statistics, and more. The project is structured with TypeScript interfaces and React components to ensure type safety and modularity.
 
-## Key Components
+## Folder Structure
+
+```
+.
+├── app
+│   └── migration
+│       └── dramas
+│           └── bugaboo-inter
+│               └── [id]
+│                   └── page.tsx
+├── components
+│   ├── data-table
+│   │   └── data-table-pagination.tsx
+│   ├── drama-mapping
+│   │   └── mapping-table.tsx
+│   ├── layout
+│   │   └── section-stats.tsx
+│   ├── migration
+│   │   ├── data-quality-card.tsx
+│   │   ├── migration-stats.tsx
+│   │   ├── migration-table.tsx
+│   │   └── summary-card.tsx
+│   ├── stats
+│   │   └── stats-card.tsx
+│   └── ui
+│       ├── badge.tsx
+│       ├── calendar.tsx
+│       ├── carousel.tsx
+│       ├── chart.tsx
+│       ├── pagination.tsx
+│       └── sonner.tsx
+├── hooks
+│   └── use-toast.ts
+├── lib
+│   ├── mock-data.ts
+│   ├── stats.ts
+│   └── types
+│       ├── data-table.ts
+│       ├── drama-mapping.ts
+│       └── index.ts
+```
 
 - **Drama Mapping**: Interfaces and components for mapping drama sources and targets.
 - **Migration Stats**: Components to display migration statistics and handle processed and failed items.
