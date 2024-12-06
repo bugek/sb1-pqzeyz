@@ -68,25 +68,10 @@ export default function DramaEditPage() {
       
       try {
         setLoading(true);
-        // In a real application, this would be an API call
-        // For now, we'll use mock data
-        const mockData: DramaFormValues = {
-          title_en: 'Sample Drama',
-          title_th: 'ละครตัวอย่าง',
-          synopsis_en: 'Sample synopsis in English',
-          synopsis_th: 'เรื่องย่อตัวอย่างภาษาไทย',
-          description_en: 'Sample description in English',
-          description_th: 'คำอธิบายตัวอย่างภาษาไทย',
-          category_en: 'Drama',
-          category_th: 'ละคร',
-          year_en: '2024',
-          year_th: '2567',
-          total_ep: 16,
-          rating: 8.5,
-          parental_rating: 'PG-13',
-        };
-
-        setInitialData(mockData);
+        const response = await fetch(`/api/dramas/${params.id}`);
+        if (!response.ok) throw new Error('Failed to fetch drama data');
+        const data: DramaFormValues = await response.json();
+        setInitialData(data);
         form.reset(mockData);
         toast.success('Drama data loaded successfully');
       } catch (error) {
@@ -103,8 +88,14 @@ export default function DramaEditPage() {
   const onSubmit = async (data: DramaFormValues) => {
     try {
       setLoading(true);
-      // In a real application, this would be an API call
-      console.log('Submitting data:', data);
+      const response = await fetch(`/api/dramas/${params.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) throw new Error('Failed to update drama');
       toast.success('Drama updated successfully');
       router.push('/migration/dramas/bugaboo-inter');
     } catch (error) {
