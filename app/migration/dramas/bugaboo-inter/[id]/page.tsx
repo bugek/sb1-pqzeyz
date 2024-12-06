@@ -68,7 +68,7 @@ function DramaEditPage() {
       
       try {
         setLoading(true);
-        const response = await fetch(`/api/dramas/${params.id}`);
+        const response = await fetch(`/api/dramas/bugaboo-inter/${params.id}`);
         if (!response.ok) throw new Error('Failed to fetch drama data');
         const data: DramaFormValues = await response.json();
         setInitialData(data);
