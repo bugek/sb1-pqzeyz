@@ -37,7 +37,7 @@ const dramaSchema = z.object({
 
 type DramaFormValues = z.infer<typeof dramaSchema>;
 
-export default function DramaEditPage() {
+function DramaEditPage() {
   const params = useParams();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -341,3 +341,5 @@ export default function DramaEditPage() {
     </div>
   );
 }
+
+export default DramaEditPage;
