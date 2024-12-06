@@ -87,10 +87,15 @@ export default function BugabooInterDramasPage() {
   const fetchPreview = async () => {
     try {
       setLoading(true);
-      const dramas = generateMockDramaSources('bugaboo_inter');
+      const response = await fetch('/api/dramas/bugaboo-inter');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const dramas = await response.json();
       setData(dramas);
       toast.success('Preview data loaded successfully');
     } catch (error) {
+      console.error('Error loading preview data:', error);
       toast.error('Failed to load preview data');
     } finally {
       setLoading(false);
