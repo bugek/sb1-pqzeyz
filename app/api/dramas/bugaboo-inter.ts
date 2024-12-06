@@ -9,4 +9,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } catch (error) {
     res.status(500).json({ message: 'Failed to fetch drama data' });
   }
+}import { NextApiRequest, NextApiResponse } from 'next';
+
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  return res.status(404).json({ error: 'Not Found' });
 }
