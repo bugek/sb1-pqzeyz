@@ -85,7 +85,21 @@ function DramaEditPage() {
     fetchDramaData();
   }, [params.id, form, router]);
 
-  const onSubmit = async (data: DramaFormValues) => {
+  const loadPreviewData = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/dramas/bugaboo-inter/${params.id}?preview=true`);
+      if (!response.ok) throw new Error('Failed to load preview data');
+      const data: DramaFormValues = await response.json();
+      setInitialData(data);
+      form.reset(data);
+      toast.success('Preview data loaded successfully');
+    } catch (error) {
+      toast.error('Failed to load preview data');
+    } finally {
+      setLoading(false);
+    }
+  };
     try {
       setLoading(true);
       const response = await fetch(`/api/dramas/${params.id}`, {
@@ -329,6 +343,14 @@ function DramaEditPage() {
                   disabled={loading}
                 >
                   Cancel
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={loadPreviewData}
+                  disabled={loading}
+                >
+                  Load Preview Data
                 </Button>
                 <Button type="submit" disabled={loading}>
                   {loading ? 'Saving...' : 'Save Changes'}
