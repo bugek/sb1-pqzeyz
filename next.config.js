@@ -7,6 +7,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: { unoptimized: true },
+  trailingSlash: true, // Optional: Add trailing slashes to URLs
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.cache = {
