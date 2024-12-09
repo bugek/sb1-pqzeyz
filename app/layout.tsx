@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Data Migration System',
-  description: 'A comprehensive system for managing data migration across different sections',
+  description: 'A comprehensive system for managing data migration across different sections'
 };
 
 export default function RootLayout({

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 // import clientPromise from '@/lib/mongodb';
 
 // export const revalidate = 0; // disable cache
