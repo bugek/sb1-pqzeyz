@@ -10,7 +10,7 @@ interface UseDataTableProps<T> {
 }
 
 export function useDataTable<T>({ 
-  data,
+  data = [], // Ensure data is initialized as an empty array if not provided
   defaultSort,
   defaultPageSize = 10
 }: UseDataTableProps<T>) {
@@ -24,7 +24,7 @@ export function useDataTable<T>({
 
   // Apply filters and sorting
   const filteredAndSortedData = useMemo(() => {
-    let processed = [...data];
+    let processed = Array.isArray(data) ? [...data] : []; // Ensure data is an array
 
     // Apply filters
     Object.entries(filters).forEach(([key, value]) => {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { DataTable } from '@/components/data-table/data-table';
 import { useDataTable } from '@/hooks/use-data-table';
@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Pencil } from 'lucide-react';
 import { toast } from 'sonner';
-import { generateMockDramaSources } from '@/lib/mock-data/drama-mapping';
 import type { ColumnDef } from '@/lib/types/data-table';
 import type { DramaSource } from '@/lib/types/drama-mapping';
 
@@ -17,6 +16,7 @@ export default function BugabooInterDramasPage() {
   const router = useRouter();
   const [data, setData] = useState<DramaSource[]>([]);
   const [loading, setLoading] = useState(false);
+  const [totalItems, setTotalItems] = useState(0);
 
   const columns: ColumnDef<DramaSource>[] = [
     {
@@ -82,17 +82,36 @@ export default function BugabooInterDramasPage() {
   } = useDataTable({
     data,
     defaultSort: { column: 'title', direction: 'asc' },
+    serverSide: true,
+    totalItems,
   });
 
-  const fetchPreview = async () => {
+  const fetchPreview = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/dramas/bugaboo-inter');
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      const dramas = await response.json();
-      setData(dramas);
+      const queryParams = new URLSearchParams({
+        page: String(pagination.pageIndex),
+        pageSize: String(pagination.pageSize),
+        filter: JSON.stringify(
+          (Array.isArray(filters) ? filters : []).reduce((acc, filter) => {
+            if (filter.value) acc[filter.id] = filter.value;
+            return acc;
+          }, {})
+        ),
+        sort: JSON.stringify(
+          (Array.isArray(sorting) ? sorting : []).reduce((acc, sort) => {
+            acc[sort.id] = sort.desc ? -1 : 1;
+            return acc;
+          }, {})
+        ),
+      });
+
+      const response = await fetch(`/api/dramas/bugaboo-inter?${queryParams}`);
+      if (!response.ok) throw new Error('Network response was not ok');
+      
+      const { data, total } = await response.json();
+      setData(data);
+      setTotalItems(total);
       toast.success('Preview data loaded successfully');
     } catch (error) {
       console.error('Error loading preview data:', error);
@@ -100,7 +119,11 @@ export default function BugabooInterDramasPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [pagination.pageIndex, pagination.pageSize, filters, sorting]);
+
+  useEffect(() => {
+    fetchPreview();
+  }, [fetchPreview]);
 
   return (
     <div className="container mx-auto px-4 py-8">
