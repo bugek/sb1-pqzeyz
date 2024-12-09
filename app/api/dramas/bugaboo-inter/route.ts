@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 // import clientPromise from '@/lib/mongodb';
 
-// export const revalidate = 0; // disable cache
-// export const fetchCache = 'force-no-store';
-// export const runtime = 'nodejs';
+export const dynamic = "force-dynamic";
+export const revalidate = 0; // disable cache
+export const fetchCache = 'force-no-store';
+export const runtime = 'nodejs';
 
 export async function GET(req: NextRequest) {
   try {
