@@ -2,6 +2,25 @@
 
 This project is a drama management system that includes various components for handling drama data, mapping, and statistics. It provides interfaces and components for managing drama sources, mapping tables, migration statistics, and more. The project is structured with TypeScript interfaces and React components to ensure type safety and modularity.
 
+## Setup
+
+1. Install dependencies:
+```
+npm install
+```
+
+2. Set up environment variables:
+Create a `.env` file in the root directory and add the following variables:
+```
+REACT_APP_API_URL=<your_api_url>
+REACT_APP_API_KEY=<your_api_key>
+```
+
+3. Start the development server:
+```
+npm start
+```
+
 ## Folder Structure
 
 ```

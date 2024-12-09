@@ -2,24 +2,13 @@ const path = require('path');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
   eslint: {
     ignoreDuringBuilds: true,
   },
   images: { unoptimized: true },
   trailingSlash: true,
-  exportPathMap: async function (
-    defaultPathMap,
-    { dev, dir, outDir, distDir, buildId }
-  ) {
-    // Ensure API routes are excluded from the static export
-    const filteredPathMap = Object.keys(defaultPathMap).reduce((acc, path) => {
-      if (!path.startsWith('/api')) {
-        acc[path] = defaultPathMap[path];
-      }
-      return acc;
-    }, {});
-    return filteredPathMap;
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {

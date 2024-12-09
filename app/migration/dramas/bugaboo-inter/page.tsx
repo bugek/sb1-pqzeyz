@@ -11,6 +11,7 @@ import { Pencil } from 'lucide-react';
 import { toast } from 'sonner';
 import type { ColumnDef } from '@/lib/types/data-table';
 import type { DramaSource } from '@/lib/types/drama-mapping';
+import { fetchDramas } from '@/app/services/drama.service';
 
 export default function BugabooInterDramasPage() {
   const router = useRouter();
@@ -89,27 +90,13 @@ export default function BugabooInterDramasPage() {
   const fetchPreview = useCallback(async () => {
     try {
       setLoading(true);
-      const queryParams = new URLSearchParams({
-        page: String(pagination.pageIndex),
-        pageSize: String(pagination.pageSize),
-        filter: JSON.stringify(
-          (Array.isArray(filters) ? filters : []).reduce((acc, filter) => {
-            if (filter.value) acc[filter.id] = filter.value;
-            return acc;
-          }, {})
-        ),
-        sort: JSON.stringify(
-          (Array.isArray(sorting) ? sorting : []).reduce((acc, sort) => {
-            acc[sort.id] = sort.desc ? -1 : 1;
-            return acc;
-          }, {})
-        ),
+      const { data, total } = await fetchDramas({
+        page: pagination.pageIndex,
+        pageSize: pagination.pageSize,
+        filters,
+        sorting
       });
-
-      const response = await fetch(`/api/dramas/bugaboo-inter?${queryParams}`);
-      if (!response.ok) throw new Error('Network response was not ok');
       
-      const { data, total } = await response.json();
       setData(data);
       setTotalItems(total);
       toast.success('Preview data loaded successfully');
