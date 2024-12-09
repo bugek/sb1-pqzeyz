@@ -1,4 +1,4 @@
-const path = require('path'); // Add this line
+const path = require('path');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -7,12 +7,12 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: { unoptimized: true },
-  trailingSlash: true, // Optional: Add trailing slashes to URLs
+  trailingSlash: true,
   exportPathMap: async function (
     defaultPathMap,
     { dev, dir, outDir, distDir, buildId }
   ) {
-    // Exclude API routes from the static export
+    // Ensure API routes are excluded from the static export
     const filteredPathMap = Object.keys(defaultPathMap).reduce((acc, path) => {
       if (!path.startsWith('/api')) {
         acc[path] = defaultPathMap[path];
