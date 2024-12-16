@@ -7,19 +7,21 @@ interface UseDataTableProps<T> {
   data: T[];
   defaultSort?: SortState;
   defaultPageSize?: number;
+  totalItems: number;
 }
 
 export function useDataTable<T>({ 
   data = [], // Ensure data is initialized as an empty array if not provided
   defaultSort,
-  defaultPageSize = 10
+  defaultPageSize = 10,
+  totalItems
 }: UseDataTableProps<T>) {
   const [filters, setFilters] = useState<FilterState>({});
   const [sorting, setSorting] = useState<SortState | undefined>(defaultSort);
   const [pagination, setPagination] = useState<PaginationState>({
     page: 1,
     pageSize: defaultPageSize,
-    total: data.length,
+    total: totalItems,
   });
 
   // Apply filters and sorting
@@ -56,20 +58,21 @@ export function useDataTable<T>({
 
   // Apply pagination
   const processedData = useMemo(() => {
-    const start = (pagination.page - 1) * pagination.pageSize;
-    const end = start + pagination.pageSize;
-    return filteredAndSortedData.slice(start, end);
+    // const start = (pagination.page - 1) * pagination.pageSize;
+    // const end = start + pagination.pageSize;
+    // return filteredAndSortedData.slice(start, end);
+    return filteredAndSortedData;
   }, [filteredAndSortedData, pagination.page, pagination.pageSize]);
 
-  // Update total count when filtered data changes
+  // Update total count when totalItems changes
   useEffect(() => {
     setPagination(prev => ({
       ...prev,
-      total: filteredAndSortedData.length,
+      total: totalItems,
       // Reset to first page if current page is out of bounds
-      page: Math.min(prev.page, Math.ceil(filteredAndSortedData.length / prev.pageSize) || 1)
+      page: Math.min(prev.page, Math.ceil(totalItems / prev.pageSize) || 1)
     }));
-  }, [filteredAndSortedData]);
+  }, [totalItems]);
 
   const handlePaginationChange = useCallback((newPagination: Partial<PaginationState>) => {
     setPagination(prev => ({

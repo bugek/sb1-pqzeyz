@@ -35,6 +35,12 @@ export function DataTable<T>({
     return sorting.direction === 'asc' ? <ArrowUp className="ml-2 h-4 w-4" /> : <ArrowDown className="ml-2 h-4 w-4" />;
   };
 
+  const handlePaginationChange = (newPagination: { pageIndex: number; pageSize: number }) => {
+    if (onPaginationChange) {
+      onPaginationChange(newPagination);
+    }
+  };
+
   return (
     <div className="space-y-4">
       {filters && onFiltersChange && (
@@ -89,7 +95,7 @@ export function DataTable<T>({
                   {columns.map((column) => (
                     <TableCell key={column.id}>
                       {column.cell 
-                        ? column.cell(row[column.accessorKey])
+                        ? column.cell({ row: row  })
                         : row[column.accessorKey] as string}
                     </TableCell>
                   ))}
@@ -102,7 +108,7 @@ export function DataTable<T>({
 
       <DataTablePagination
         pagination={pagination}
-        onPaginationChange={onPaginationChange}
+        onPaginationChange={handlePaginationChange}
       />
     </div>
   );

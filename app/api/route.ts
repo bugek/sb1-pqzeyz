@@ -7,3 +7,12 @@ export function GET(request: NextRequest) {
   return NextResponse.json({
   });
 }
+
+export async function POST(request: NextRequest) {
+  const body = await request.json();
+  console.log(body);
+  return NextResponse.json({
+    message: 'Data received',
+    data: body
+  });
+}

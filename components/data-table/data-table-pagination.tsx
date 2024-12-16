@@ -21,6 +21,8 @@ export function DataTablePagination({
 }: DataTablePaginationProps) {
   const totalPages = Math.ceil(pagination.total / pagination.pageSize);
 
+  console.log('pagination', pagination);
+
   return (
     <div className="flex items-center justify-between px-2">
       <div className="flex items-center space-x-6 lg:space-x-8">

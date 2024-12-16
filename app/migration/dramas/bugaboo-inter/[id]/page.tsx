@@ -18,6 +18,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { fetchDramaById, updateDrama } from '@/app/services/drama.service';
 
 const dramaSchema = z.object({
   title_en: z.string().min(1, 'English title is required'),
@@ -68,11 +69,9 @@ function DramaEditPage() {
       
       try {
         setLoading(true);
-        const response = await fetch(`/api/dramas/bugaboo-inter/${params.id}`);
-        if (!response.ok) throw new Error('Failed to fetch drama data');
-        const data: DramaFormValues = await response.json();
+        const data = await fetchDramaById(params.id);
         setInitialData(data);
-        form.reset(mockData);
+        form.reset(data);
         toast.success('Drama data loaded successfully');
       } catch (error) {
         toast.error('Failed to load drama data');
@@ -88,9 +87,7 @@ function DramaEditPage() {
   const loadPreviewData = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/dramas/bugaboo-inter/${params.id}?preview=true`);
-      if (!response.ok) throw new Error('Failed to load preview data');
-      const data: DramaFormValues = await response.json();
+      const data = await fetchDramaById(params.id, true);
       setInitialData(data);
       form.reset(data);
       toast.success('Preview data loaded successfully');
@@ -100,16 +97,11 @@ function DramaEditPage() {
       setLoading(false);
     }
   };
+
+  const onSubmit = async (data: DramaFormValues) => {
     try {
       setLoading(true);
-      const response = await fetch(`/api/dramas/${params.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      if (!response.ok) throw new Error('Failed to update drama');
+      await updateDrama(params.id, data);
       toast.success('Drama updated successfully');
       router.push('/migration/dramas/bugaboo-inter');
     } catch (error) {
